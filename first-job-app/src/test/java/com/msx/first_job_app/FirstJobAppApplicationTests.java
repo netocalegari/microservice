@@ -1,10 +1,10 @@
-package com.msx.MicroService;
+package com.msx.first_job_app;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MicroServiceApplicationTests {
+class FirstJobAppApplicationTests {
 
 	@Test
 	void contextLoads() {
