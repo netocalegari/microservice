@@ -1,0 +1,57 @@
+# Diretório de build do Maven e Gradle
+target/
+build/
+
+# Dependências do Maven
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Dependências do Gradle
+.gradle/
+build/
+
+# Arquivos de cache do IntelliJ IDEA
+*.iml
+.idea/
+*.ipr
+*.iws
+
+# Logs e arquivos temporários
+*.log
+hs_err_pid*
+replay_pid*
+!src/main/resources/
+!src/test/resources/
+
+# Configurações locais do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos do Eclipse
+.settings/
+.project
+.classpath
+
+# Arquivos do VS Code
+.vscode/
+
+# Arquivos do Linux/macOS
+*.swp
+*~
+
+# Dependências do Java
+*.class
+
+# Arquivos gerados pelo Lombok
+*.lombok.config
+
+# Variáveis de ambiente e senhas sensíveis
+.env
+application.properties
+application.yml
+application-dev.properties
+application-prod.properties
+application-test.properties
