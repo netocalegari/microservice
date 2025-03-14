@@ -1,45 +1,52 @@
 package com.msx.first_job_app.job.impl;
 
 import com.msx.first_job_app.job.Job;
+import com.msx.first_job_app.job.JobRepository;
 import com.msx.first_job_app.job.JobService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class JobServiceImpl implements JobService {
-    private final List<Job> jobs = new ArrayList<>();
-    private Long nextId = 1L;
+    JobRepository jobRepository;
+
+    public JobServiceImpl(JobRepository jobRepository) {
+        this.jobRepository = jobRepository;
+    }
 
     @Override
     public List<Job> findAll() {
-        return jobs;
+        return jobRepository.findAll();
     }
 
     @Override
+    @Transactional
     public void create(Job job) {
-        job.setId(nextId++);
-        jobs.add(job);
+        jobRepository.save(job);
     }
 
     @Override
-    public Job getJobById(Long id) {
-        return jobs.stream().filter(job -> job.getId().equals(id)).findFirst().orElse(null);
+    public Job findJobById(Long id) {
+        return jobRepository.findById(id).orElse(null);
     }
 
     @Override
+    @Transactional
     public boolean delete(Long id) {
-        Job job = getJobById(id);
+        if (!jobRepository.existsById(id)) {
+            return false;
+        }
 
-        if (job == null) return false;
-
-        return jobs.remove(job);
+        jobRepository.deleteById(id);
+        return true;
     }
 
     @Override
+    @Transactional
     public boolean update(Long id, Job job) {
-        Job jobFound = getJobById(id);
+        Job jobFound = findJobById(id);
 
         if (jobFound == null) return false;
 
@@ -50,18 +57,5 @@ public class JobServiceImpl implements JobService {
         if (job.getLocation() != null) jobFound.setLocation(job.getLocation());
 
         return true;
-//        Job updatedJob = new Job(
-//                jobFound.getId(),
-//                job.getTitle() != null ? job.getTitle() : jobFound.getTitle(),
-//                job.getDescription() != null ? job.getDescription() : jobFound.getDescription(),
-//                job.getMinSalary() != null ? job.getMinSalary() : jobFound.getMinSalary(),
-//                job.getMaxSalary() != null ? job.getMaxSalary() : jobFound.getMaxSalary(),
-//                job.getLocation() != null ? job.getLocation() : jobFound.getLocation()
-//        );
-
-//        delete(jobFound.getId());
-//        jobs.add(updatedJob);
-
-//        return true;
     }
 }
