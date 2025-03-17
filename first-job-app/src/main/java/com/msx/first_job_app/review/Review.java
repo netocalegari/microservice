@@ -15,6 +15,7 @@ public class Review {
 
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
     public Review() {

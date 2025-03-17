@@ -29,19 +29,37 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @Transactional
     public boolean create(Company company) {
-        List<Company> companies = findAllCompanies();
+        boolean companyExists = companyRepository.existsByName(company.getName());
 
-        Company companyExists = companies.stream()
-                                         .filter(c -> c.getName().equals(company.getName()))
-                                         .findFirst()
-                                         .orElse(null);
+//        Company companyExists = companies.stream()
+//                                         .filter(c -> c.getName().equals(company.getName()))
+//                                         .findFirst()
+//                                         .orElse(null);
 
-        if (companyExists != null) return false;
+        if (companyExists) {
+            return false;
+        }
 
         companyRepository.save(company);
 
         return true;
     }
+//    @Override
+//    @Transactional
+//    public boolean create(Company company) {
+//        List<Company> companies = findAllCompanies();
+//
+//        Company companyExists = companies.stream()
+//                                         .filter(c -> c.getName().equals(company.getName()))
+//                                         .findFirst()
+//                                         .orElse(null);
+//
+//        if (companyExists != null) return false;
+//
+//        companyRepository.save(company);
+//
+//        return true;
+//    }
 
     @Override
     @Transactional

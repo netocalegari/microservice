@@ -1,5 +1,6 @@
 package com.msx.first_job_app.job;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.msx.first_job_app.company.Company;
 import jakarta.persistence.*;
 
@@ -15,6 +16,8 @@ public class Job {
     private String location;
 
     @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    @JsonIgnoreProperties("reviews")
     private Company company;
 
     public Job() {
