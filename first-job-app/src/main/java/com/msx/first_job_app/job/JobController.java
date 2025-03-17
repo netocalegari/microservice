@@ -1,5 +1,6 @@
 package com.msx.first_job_app.job;
 
+import com.msx.first_job_app.company.Company;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
