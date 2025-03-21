@@ -3,8 +3,11 @@ package com.msx.jobms.job.impl;
 import com.msx.jobms.job.Job;
 import com.msx.jobms.job.JobRepository;
 import com.msx.jobms.job.JobService;
+import com.msx.jobms.job.dto.JobWithCompanyDTO;
+import com.msx.jobms.job.external.Company;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -17,8 +20,11 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> findAll() {
-        return jobRepository.findAll();
+    public List<JobWithCompanyDTO> findAll() {
+        List<Job> jobs = jobRepository.findAll();
+//        List<JobWithCompanyDTO> jobWithCompanyDTOS = new ArrayList<>();
+
+        return jobs.stream().map(this::convertToDto).toList();
     }
 
     @Override
@@ -57,5 +63,31 @@ public class JobServiceImpl implements JobService {
         if (job.getLocation() != null) jobFound.setLocation(job.getLocation());
 
         return true;
+    }
+
+    private JobWithCompanyDTO convertToDto(Job job) {
+//        JobWithCompanyDTO jobWithCompanyDTO = new JobWithCompanyDTO();
+//        jobWithCompanyDTO.setJob(job);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        Company company = restTemplate.getForObject(
+                "http://localhost:8081/api/company/" + job.getCompanyId(),
+                Company.class
+        );
+
+        JobWithCompanyDTO jobWithCompanyDTO = new JobWithCompanyDTO(
+                job.getId(),
+                job.getTitle(),
+                job.getDescription(),
+                job.getMinSalary(),
+                job.getMaxSalary(),
+                job.getLocation(),
+//                job.getCompanyId(),
+                company
+        );
+        jobWithCompanyDTO.setCompany(company);
+
+        return jobWithCompanyDTO;
     }
 }

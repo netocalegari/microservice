@@ -1,9 +1,11 @@
 package com.msx.jobms.job;
 
+import com.msx.jobms.job.dto.JobWithCompanyDTO;
+
 import java.util.List;
 
 public interface JobService {
-    List<Job> findAll();
+    List<JobWithCompanyDTO> findAll();
 
     void create(Job job);
 
