@@ -1,21 +1,22 @@
 package com.msx.jobms.job.dto;
 
 import com.msx.jobms.job.external.Company;
+import com.msx.jobms.job.external.Review;
 
-public class JobWithCompanyDTO {
+public class JobDTO {
     private Long id;
     private String title;
     private String description;
     private String minSalary;
     private String maxSalary;
     private String location;
-    //    private Long companyId;
     private Company company;
+    private Review review;
 
-    public JobWithCompanyDTO() {
+    public JobDTO() {
     }
 
-    public JobWithCompanyDTO(
+    public JobDTO(
             Long id, String title, String description, String minSalary, String maxSalary, String location,
 //            Long companyId,
             Company company
@@ -26,7 +27,6 @@ public class JobWithCompanyDTO {
         this.minSalary = minSalary;
         this.maxSalary = maxSalary;
         this.location = location;
-//        this.companyId = companyId;
         this.company = company;
     }
 
@@ -78,14 +78,6 @@ public class JobWithCompanyDTO {
         this.location = location;
     }
 
-//    public Long getCompanyId() {
-//        return companyId;
-//    }
-//
-//    public void setCompanyId(Long companyId) {
-//        this.companyId = companyId;
-//    }
-
     public Company getCompany() {
         return company;
     }
@@ -93,25 +85,13 @@ public class JobWithCompanyDTO {
     public void setCompany(Company company) {
         this.company = company;
     }
-//    private Job job;
-//    private Company company;
-//
-//    public Job getJob() {
-//        return job;
-//    }
-//
-//    public void setJob(Job job) {
-//        this.job = job;
-//    }
-//
-//    public Company getCompany() {
-//        return company;
-//    }
-//
-//    public void setCompany(Company company) {
-//        this.company = company;
-//    }
 
+    public Review getReview() {
+        return review;
+    }
 
+    public void setReview(Review review) {
+        this.review = review;
+    }
 }
 
