@@ -1,15 +1,15 @@
 package com.msx.jobms.job;
 
-import com.msx.jobms.job.dto.JobWithCompanyDTO;
+import com.msx.jobms.job.dto.JobDTO;
 
 import java.util.List;
 
 public interface JobService {
-    List<JobWithCompanyDTO> findAll();
+    List<JobDTO> findAll();
 
     void create(Job job);
 
-    Job findJobById(Long id);
+    JobDTO findJobById(Long id);
 
     boolean delete(Long id);
 

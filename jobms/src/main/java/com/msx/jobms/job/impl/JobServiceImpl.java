@@ -3,9 +3,14 @@ package com.msx.jobms.job.impl;
 import com.msx.jobms.job.Job;
 import com.msx.jobms.job.JobRepository;
 import com.msx.jobms.job.JobService;
-import com.msx.jobms.job.dto.JobWithCompanyDTO;
+import com.msx.jobms.job.clients.CompanyClient;
+import com.msx.jobms.job.clients.ReviewClient;
+import com.msx.jobms.job.dto.JobDTO;
 import com.msx.jobms.job.external.Company;
+import com.msx.jobms.job.external.Review;
+import com.msx.jobms.job.mapper.JobMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,16 +18,23 @@ import java.util.List;
 
 @Service
 public class JobServiceImpl implements JobService {
+    private final CompanyClient companyClient;
+    private final ReviewClient reviewClient;
+
     JobRepository jobRepository;
 
-    public JobServiceImpl(JobRepository jobRepository) {
+    @Autowired
+    RestTemplate restTemplate;
+
+    public JobServiceImpl(JobRepository jobRepository, CompanyClient companyClient, ReviewClient reviewClient) {
         this.jobRepository = jobRepository;
+        this.companyClient = companyClient;
+        this.reviewClient = reviewClient;
     }
 
     @Override
-    public List<JobWithCompanyDTO> findAll() {
+    public List<JobDTO> findAll() {
         List<Job> jobs = jobRepository.findAll();
-//        List<JobWithCompanyDTO> jobWithCompanyDTOS = new ArrayList<>();
 
         return jobs.stream().map(this::convertToDto).toList();
     }
@@ -34,8 +46,12 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job findJobById(Long id) {
-        return jobRepository.findById(id).orElse(null);
+    public JobDTO findJobById(Long id) {
+        Job job = jobRepository.findById(id).orElse(null);
+
+        if (job == null) return null;
+
+        return convertToDto(job);
     }
 
     @Override
@@ -52,7 +68,7 @@ public class JobServiceImpl implements JobService {
     @Override
     @Transactional
     public boolean update(Long id, Job job) {
-        Job jobFound = findJobById(id);
+        Job jobFound = jobRepository.findById(id).orElse(null);
 
         if (jobFound == null) return false;
 
@@ -65,29 +81,11 @@ public class JobServiceImpl implements JobService {
         return true;
     }
 
-    private JobWithCompanyDTO convertToDto(Job job) {
-//        JobWithCompanyDTO jobWithCompanyDTO = new JobWithCompanyDTO();
-//        jobWithCompanyDTO.setJob(job);
+    private JobDTO convertToDto(Job job) {
+        Company company = companyClient.getCompany(job.getCompanyId());
 
-        RestTemplate restTemplate = new RestTemplate();
+        List<Review> reviews = reviewClient.getReviews(company.getId());
 
-        Company company = restTemplate.getForObject(
-                "http://localhost:8081/api/company/" + job.getCompanyId(),
-                Company.class
-        );
-
-        JobWithCompanyDTO jobWithCompanyDTO = new JobWithCompanyDTO(
-                job.getId(),
-                job.getTitle(),
-                job.getDescription(),
-                job.getMinSalary(),
-                job.getMaxSalary(),
-                job.getLocation(),
-//                job.getCompanyId(),
-                company
-        );
-        jobWithCompanyDTO.setCompany(company);
-
-        return jobWithCompanyDTO;
+        return JobMapper.mapToJobWithCompanyDto(job, company, reviews);
     }
 }

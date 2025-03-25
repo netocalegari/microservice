@@ -3,6 +3,8 @@ package com.msx.jobms.job.dto;
 import com.msx.jobms.job.external.Company;
 import com.msx.jobms.job.external.Review;
 
+import java.util.List;
+
 public class JobDTO {
     private Long id;
     private String title;
@@ -11,15 +13,20 @@ public class JobDTO {
     private String maxSalary;
     private String location;
     private Company company;
-    private Review review;
+    private List<Review> reviews;
 
     public JobDTO() {
     }
 
     public JobDTO(
-            Long id, String title, String description, String minSalary, String maxSalary, String location,
-//            Long companyId,
-            Company company
+            Long id,
+            String title,
+            String description,
+            String minSalary,
+            String maxSalary,
+            String location,
+            Company company,
+            List<Review> reviews
     ) {
         this.id = id;
         this.title = title;
@@ -28,6 +35,7 @@ public class JobDTO {
         this.maxSalary = maxSalary;
         this.location = location;
         this.company = company;
+        this.reviews = reviews;
     }
 
     public Long getId() {
@@ -86,12 +94,12 @@ public class JobDTO {
         this.company = company;
     }
 
-    public Review getReview() {
-        return review;
+    public List<Review> getReview() {
+        return reviews;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setReview(List<Review> review) {
+        this.reviews = review;
     }
 }
 
