@@ -23,7 +23,9 @@ public class JobController {
 
     @PostMapping()
     public ResponseEntity<Void> create(@RequestBody Job job) {
-        jobService.create(job);
+        boolean success = jobService.create(job);
+
+        if (!success) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

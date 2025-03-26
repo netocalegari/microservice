@@ -7,7 +7,7 @@ import java.util.List;
 public interface JobService {
     List<JobDTO> findAll();
 
-    void create(Job job);
+    boolean create(Job job);
 
     JobDTO findJobById(Long id);
 
