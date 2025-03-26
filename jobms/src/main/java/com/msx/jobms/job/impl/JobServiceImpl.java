@@ -42,6 +42,12 @@ public class JobServiceImpl implements JobService {
     @Override
     @Transactional
     public void create(Job job) {
+        Long companyId = job.getCompanyId();
+
+//        Company company = companyClient.getCompany(companyId);
+        
+//        if (company == null) return null;
+
         jobRepository.save(job);
     }
 
